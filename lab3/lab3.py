@@ -1,7 +1,20 @@
 import numpy as np
 import os
+import platform
+from mlxtend.data import loadlocal_mnist
 
+if not platform.system() == 'Windows':
+    X, y = loadlocal_mnist(
+            images_path='t10k-images.idx3-ubyte', 
+            labels_path='t10k-labels.idx1-ubyte')
+
+else:
+    X, y = loadlocal_mnist(
+            images_path='t10k-images.idx3-ubyte', 
+            labels_path='t10k-labels.idx1-ubyte')
 np.random.seed(42)
+
+
 
 # To plot pretty figures
 import matplotlib as mpl
@@ -33,7 +46,7 @@ def random_digit():
     plt.show()
 
    
-def load_and_sort()
+def load_and_sort():
     try:
         from sklearn.datasets import fetch_openml
         mnist = fetch_openml('mnist_784', version=1, cache=True)
@@ -70,3 +83,4 @@ def train_predict(some_digit):
     
 def calculate_cross_val_score():
     # TODO
+    None
