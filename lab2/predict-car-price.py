@@ -143,7 +143,7 @@ def main():
 
     X_test = obj.prepare_X(df_test)
     y_pred = w_0 + X_test.dot(w)
-    # print('test:', obj.rmse(y_test, y_pred))
+    print('test:', obj.rmse(y_test, y_pred))
 
     df_test_orig['msrp_pred'] = np.expm1(y_pred)
     # print(df_test['msrp'])
