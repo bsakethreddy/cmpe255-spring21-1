@@ -83,7 +83,6 @@ class DiabetesClassifier:
 
     def predict(self):
         model = self.train()
-        score = model.score(self.X_test, self.y_test)
         y_pred_class = model.predict(self.X_test)
         return y_pred_class
 
@@ -103,6 +102,7 @@ class DiabetesClassifier:
 
 if __name__ == "__main__":
     classifer = DiabetesClassifier()
+
     classifer.feature_engineering()
     # classifer.define_feature()
     result = classifer.predict()
