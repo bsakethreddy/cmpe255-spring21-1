@@ -54,35 +54,33 @@ class DiabetesClassifier:
             self.pima, columns=["newGlucose", "newBmi"])
         # print(self.pima.head())
 
-    def define_feature(self):
+    def define_feature(self, val):
         model = LogisticRegression(max_iter=10000)
-
         self.pima = self.pima[['newGlucose_normal', 'newGlucose_prediabetes',
                                'newBmi_obesity', 'newBmi_overweight', 'newBmi_underweight', 'pregnant', 'pedigree', 'insulin', 'skin', 'bp', 'age', 'label']]
         array = self.pima.values
         X = array[:, 0:11]
-
         y = array[:, 11]
 
-        rfe = RFE(model, 7)
+        rfe = RFE(model, val)
         fit = rfe.fit(X, y)
 
         reduced_dataset = self.pima.iloc[:, :-1].loc[:, fit.support_]
         return reduced_dataset, self.pima.label
 
-    def train(self):
+    def train(self, X, y):
 
         # split X and y into training and testing sets
-        X, y = self.define_feature()
+        # X, y = self.define_feature()
         X_train, self.X_test, y_train, self.y_test = train_test_split(
             X, y, random_state=12345)
         # train a logistic regression model on the training set
-        logreg = LogisticRegression(max_iter=10)
+        logreg = LogisticRegression(max_iter=10000)
         logreg.fit(X_train, y_train)
         return logreg
 
-    def predict(self):
-        model = self.train()
+    def predict(self, model):
+        # model = self.train()
         y_pred_class = model.predict(self.X_test)
         return y_pred_class
 
@@ -104,10 +102,13 @@ if __name__ == "__main__":
     classifer = DiabetesClassifier()
 
     classifer.feature_engineering()
-    # classifer.define_feature()
-    result = classifer.predict()
-    print(f"Predicition={result}")
-    score = classifer.calculate_accuracy(result)
-    print(f"score={score}")
-    con_matrix = classifer.confusion_matrix(result)
-    print(f"confusion_matrix=${con_matrix}")
+    # We will try with 9 features, 8 and 7. But with 7 we will get best predicted value
+    for x in [9, 8, 7]:
+        X, y = classifer.define_feature(x)
+        logreg = classifer.train(X, y)
+        result = classifer.predict(logreg)
+        print(f"Predicition={result}")
+        score = classifer.calculate_accuracy(result)
+        print(f"score={score}")
+        con_matrix = classifer.confusion_matrix(result)
+        print(f"confusion_matrix=${con_matrix}")
